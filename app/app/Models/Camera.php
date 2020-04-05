@@ -14,7 +14,7 @@ class Camera extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'code', 'secret', 'thumbnail', 'video_url', 'status'
+        'description', 'code', 'secret', 'thumbnail', 'video_url', 'status', 'address', 'address_number', 'user_id', 'name'
     ];
 
     /**
@@ -43,15 +43,14 @@ class Camera extends Model
         {
             $user = Auth::user();
 
-            $cameras = self::select('cameras.*')
-                        ->leftJoin('users', 'properties.user_id', '=', 'users.id');
+            $cameras = self::select('cameras.*');
 
-            $cameras = $cameras->where('users.id', '=', $user->id);
+            $cameras = $cameras->where('user_id', '=', $user->id);
 
             if(isset($request['description']) && $request['description'])
             {
                 $description = $request['description'];
-                $cameras = $cameras->where('cameras.description', 'LIKE', ["%{$description}%"]);
+                $cameras = $cameras->where('name', 'LIKE', ["%{$description}%"]);
             }
 
             if((isset($request['code']) && $request['code']) && (isset($request['secret']) && $request['secret']))

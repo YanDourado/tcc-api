@@ -31,6 +31,10 @@ class CreateCameraTable extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('video_url')->nullable();
             $table->boolean('status')->default(true);
+    
+            $table->string('cep')->nullable();
+            $table->string('address')->nullable();
+            $table->string('address_number')->nullable();
 
             $table->timestamps();
         });

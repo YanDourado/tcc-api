@@ -14,13 +14,14 @@ class CameraController extends Controller
      * @var $rules
      */
     protected $rules = array('id' => 'required|exists:cameras,id',
-                            'description' => 'required|string',
-                            'user' => 'required|exists:users,id');
+                            'name' => 'required|string',
+                            'address' => 'required|string',
+                            'address_number' => 'required');
 
     /**
      * @var $messages
      */
-    protected $messages = array('required' => 'O campo :attribute é obrigatório.',
+    protected $messages = array('required' => 'Campo obrigatório.',
                                 'string' => 'O campo :attribute tem que ser do tipo texto.',
                                 'exists' => 'O :attribute não existe.');
 
@@ -28,7 +29,10 @@ class CameraController extends Controller
      * @var $messages
      */
     protected $attributes = array('user' => 'usuário',
-                                'description' => 'descrição da câmera');
+                                    'name' => 'nome da câmera',
+                                    'endereço' => 'required|string',
+                                    'número' => 'required',
+                                    'description' => 'descrição da câmera');
 
 
     /**
@@ -115,10 +119,8 @@ class CameraController extends Controller
 
             $camera = Camera::updateOrCreate(
                 $request->only('id'),
-                $request->except('id')
+                ['user_id' => Auth::user()->id] + $request->except('id')
             );
-
-            $camera->property = $camera->Property;
 
             return response()->json(['camera' => $camera], 200);
         }

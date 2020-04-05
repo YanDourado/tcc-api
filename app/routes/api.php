@@ -25,8 +25,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/profile', 'ProfileController@show');
         
-        $router->group(['prefix' => 'api'], function () use ($router) {
+        $router->group(['prefix' => 'camera'], function () use ($router) {
+            $router->get('', 'CameraController@index');
 
+            $router->put('', 'CameraController@update');
         });
 
     });
