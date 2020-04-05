@@ -22,10 +22,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('login', 'AuthController@login');
 
     $router->group(['middleware' => 'auth'], function() use ($router) {
-        $router->get('users', function() {
-            $users = \App\Models\User::all();
-            return response()->json($users);
+        
+        $router->group(['prefix' => 'api'], function () use ($router) {
+
         });
+
     });
  
  });
