@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCameraTable extends Migration
+class CreateCamerasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -22,19 +22,10 @@ class CreateCameraTable extends Migration
                         ->on('users')
                         ->onDelete('cascade');
 
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
-
-            $table->string('code')->unique();
+            $table->string('code');
             $table->string('secret');
 
-            $table->string('thumbnail')->nullable();
-            $table->string('video_url')->nullable();
-            $table->boolean('status')->default(true);
-    
-            $table->string('cep')->nullable();
-            $table->string('address')->nullable();
-            $table->string('address_number')->nullable();
+            $table->boolean('status')->default(false);
 
             $table->timestamps();
         });

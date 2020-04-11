@@ -6,6 +6,7 @@ use Auth;
 use App\TCC;
 use Validator;
 use App\Models\Camera;
+use App\Models\CameraInfo;
 use Illuminate\Http\Request;
 
 class CameraController extends Controller
@@ -13,7 +14,8 @@ class CameraController extends Controller
     /**
      * @var $rules
      */
-    protected $rules = array('id' => 'required|exists:cameras,id');
+    protected $rules = array('id' => 'required|exists:cameras,id',
+                                'name' => 'required');
 
     /**
      * @var $messages
@@ -25,7 +27,7 @@ class CameraController extends Controller
     /**
      * @var $messages
      */
-    protected $attributes = array();
+    protected $attributes = array('name' => 'nome');
 
 
     /**
@@ -99,6 +101,8 @@ class CameraController extends Controller
     {
         try
         {
+            $user = Auth::user();
+
             $validator = Validator::make($request->all(), 
                                             $this->rules,
                                             $this->messages);
@@ -110,10 +114,20 @@ class CameraController extends Controller
                 return response()->json(['errors' => $validator->errors()], 409);
             }
 
-            // $camera = Camera::updateOrCreate(
-            //     $request->only('id'),
-            //     ['user_id' => Auth::user()->id] + $request->except('id')
-            // );
+            $camera = Camera::find($request->input('id'));
+
+            if($camera->user_id && $camera->user_id != $user->id)
+            {
+                return response()->json(['errors' => 'Unauthorized'], 401);
+            }
+
+            $cameraInfo = $camera->CameraInfo;
+
+            $cameraInfo = CameraInfo::updateOrCreate(
+                $cameraInfo ? $cameraInfo->only('id') : ['id' => null],
+                ['camera_id' => $camera->id] + $request->except('id')
+            );
+
 
             return response()->json(['camera' => $camera], 200);
         }

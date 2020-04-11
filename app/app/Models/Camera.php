@@ -26,6 +26,11 @@ class Camera extends Model
         'secret',
     ];
 
+    public function CameraInfo()
+    {
+        return $this->hasOne('App\Models\CameraInfo', 'camera_id', 'id');
+    }
+
     /**
      * Get a listing of the resource.
      *
