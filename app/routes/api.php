@@ -31,6 +31,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->put('', 'CameraController@update');
         });
 
+        $router->group(['prefix' => 'user'], function () use ($router) {
+
+            $router->put('', 'UserController@update');
+        });
+
     });
  
  });

@@ -13,10 +13,7 @@ class CameraController extends Controller
     /**
      * @var $rules
      */
-    protected $rules = array('id' => 'required|exists:cameras,id',
-                            'name' => 'required|string',
-                            'address' => 'required|string',
-                            'address_number' => 'required');
+    protected $rules = array('id' => 'required|exists:cameras,id');
 
     /**
      * @var $messages
@@ -28,11 +25,7 @@ class CameraController extends Controller
     /**
      * @var $messages
      */
-    protected $attributes = array('user' => 'usuário',
-                                    'name' => 'nome da câmera',
-                                    'endereço' => 'required|string',
-                                    'número' => 'required',
-                                    'description' => 'descrição da câmera');
+    protected $attributes = array();
 
 
     /**
@@ -117,10 +110,10 @@ class CameraController extends Controller
                 return response()->json(['errors' => $validator->errors()], 409);
             }
 
-            $camera = Camera::updateOrCreate(
-                $request->only('id'),
-                ['user_id' => Auth::user()->id] + $request->except('id')
-            );
+            // $camera = Camera::updateOrCreate(
+            //     $request->only('id'),
+            //     ['user_id' => Auth::user()->id] + $request->except('id')
+            // );
 
             return response()->json(['camera' => $camera], 200);
         }

@@ -14,7 +14,7 @@ class Camera extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'code', 'secret', 'thumbnail', 'video_url', 'status', 'address', 'address_number', 'user_id', 'name'
+        'code', 'secret', 'user_id',
     ];
 
     /**
@@ -25,11 +25,6 @@ class Camera extends Model
     protected $hidden = [
         'secret',
     ];
-
-    public function User()
-    {
-        return $this->belongsToMany('App\Models\User', 'properties', 'id', 'user_id');
-    }
 
     /**
      * Get a listing of the resource.
@@ -46,12 +41,6 @@ class Camera extends Model
             $cameras = self::select('cameras.*');
 
             $cameras = $cameras->where('user_id', '=', $user->id);
-
-            if(isset($request['description']) && $request['description'])
-            {
-                $description = $request['description'];
-                $cameras = $cameras->where('name', 'LIKE', ["%{$description}%"]);
-            }
 
             if((isset($request['code']) && $request['code']) && (isset($request['secret']) && $request['secret']))
             {
