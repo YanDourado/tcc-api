@@ -23,7 +23,9 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withFacades();
+$app->withFacades(
+    class_alias('Intervention\Image\Facades\Image', 'Image')
+);
 
 $app->withEloquent();
 
@@ -95,6 +97,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Intervention\Image\ImageServiceProviderLumen::class);
 
 /*
 |--------------------------------------------------------------------------

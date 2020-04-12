@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use Auth;
 use App\TCC;
 use Validator;
