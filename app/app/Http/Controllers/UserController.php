@@ -22,16 +22,10 @@ class UserController extends Controller
     {
         try
         {
-            Log::debug('USER', $request->all());
             $authUser = Auth::user();
 
-            if($authUser->id != $request->input('id'))
-            {
-                return response()->json('Anouthorized', 401);
-            }
-
             $user = User::updateOrCreate(
-                $request->only('id'),
+                $authUser->only('id'),
                 $request->except('id')
             );
 
