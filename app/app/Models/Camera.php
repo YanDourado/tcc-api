@@ -26,6 +26,11 @@ class Camera extends Model
         'secret',
     ];
 
+    public function User()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+
     public function CameraInfo()
     {
         return $this->hasOne('App\Models\CameraInfo', 'camera_id', 'id');

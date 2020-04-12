@@ -6,6 +6,8 @@ use Auth;
 use App\TCC;
 use Validator;
 use App\Models\Alert;
+use App\Models\Camera;
+use App\Events\AlertEvent;
 use Illuminate\Http\Request;
 
 class AlertController extends Controller
@@ -83,6 +85,10 @@ class AlertController extends Controller
                 'image_url' => $filePath,
                 'has_humna' => $request->input('has_human')
             ]);
+
+            $camera = Camera::find($request->input('camera_id'));
+
+            event(new AlertEvent($camera, $alert));
 
             return response()->json(['alert' => $alert], 201);
         }

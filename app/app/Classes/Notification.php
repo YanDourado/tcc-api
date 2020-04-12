@@ -6,22 +6,40 @@ use App\TCC;
 
 class Notification
 {
-    public static function send()
+
+    protected $url = 'https://exp.host/--/api/v2/push/send';
+
+    protected $channel;
+
+    /**
+     * Create the Notification
+     *
+     * @return void
+     */
+    public function __construct(string $channel = 'default')
+    {
+        $this->channel = $channel;
+    }
+
+    /**
+     * Send the Notification
+     *
+     * @return boolean
+     */
+    public function send(string $title, string $body)
     {
         try
-        {
-            $url = 'https://exp.host/--/api/v2/push/send';
-            
+        {       
             $params = array('to' => 'ExponentPushToken[BqTazjB-x9BtMp3xxjd1pB]',
-                            'title' => 'Hello',
-                            'body' => 'World',
-                            'channelId' => 'default');
+                            'title' => $title,
+                            'body' => $body,
+                            'channelId' => $this->channel);
 
 
             $ch = curl_init();
 
             curl_setopt_array($ch, array(
-                CURLOPT_URL => $url,
+                CURLOPT_URL => $this->url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
