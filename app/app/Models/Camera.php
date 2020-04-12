@@ -43,9 +43,16 @@ class Camera extends Model
         {
             $user = Auth::user();
 
-            $cameras = self::select('cameras.*');
+            $cameras = self::select('cameras.*')
+                                ->leftJoin('camera_info', 'cameras.id', '=', 'camera_info.camera_id');
 
             $cameras = $cameras->where('user_id', '=', $user->id);
+
+            if(isset($request['name']) && $request['name'])
+            {
+                $name = $request['name'];
+                $cameras = $cameras->where('camera_info.name', 'LIKE', ["%{$name}%"]);
+            }
 
             if((isset($request['code']) && $request['code']) && (isset($request['secret']) && $request['secret']))
             {

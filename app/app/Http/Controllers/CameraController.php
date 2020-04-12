@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Auth;
 use App\TCC;
 use Validator;
@@ -14,7 +15,7 @@ class CameraController extends Controller
     /**
      * @var $rules
      */
-    protected $rules = array('id' => 'required|exists:cameras,id',
+    protected $rules = array('camera_id' => 'required|exists:cameras,id',
                                 'name' => 'required');
 
     /**
@@ -45,9 +46,10 @@ class CameraController extends Controller
             if($cameras)
             {
                 $cameras = $cameras->orderBy('created_at', 'DESC')
-                                            ->get();
+                                        ->with('CameraInfo')
+                                        ->get();
             }
-            
+
             return response()->json(['cameras' => $cameras], 200);
 
         }
@@ -114,11 +116,19 @@ class CameraController extends Controller
                 return response()->json(['errors' => $validator->errors()], 409);
             }
 
-            $camera = Camera::find($request->input('id'));
+            $camera = Camera::find($request->input('camera_id'));
 
             if($camera->user_id && $camera->user_id != $user->id)
             {
                 return response()->json(['errors' => 'Unauthorized'], 401);
+            }
+            else if($camera)
+            {
+                $camera->user_id = $user->id;
+
+                $camera->status = $request->input('status');
+
+                $camera->save();
             }
 
             $cameraInfo = $camera->CameraInfo;
@@ -128,6 +138,9 @@ class CameraController extends Controller
                 ['camera_id' => $camera->id] + $request->except('id')
             );
 
+            $camera = Camera::where('id', '=', $request->input('camera_id'))
+                                ->with('CameraInfo')
+                                ->first();
 
             return response()->json(['camera' => $camera], 200);
         }
