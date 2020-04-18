@@ -9,6 +9,8 @@ class Notification
 
     protected $url = 'https://exp.host/--/api/v2/push/send';
 
+    protected $push_id;
+
     protected $channel;
 
     /**
@@ -16,8 +18,9 @@ class Notification
      *
      * @return void
      */
-    public function __construct(string $channel = 'default')
+    public function __construct(string $push_id, string $channel = 'default')
     {
+        $this->push_id = $push_id;
         $this->channel = $channel;
     }
 
@@ -30,7 +33,7 @@ class Notification
     {
         try
         {       
-            $params = array('to' => 'ExponentPushToken[BqTazjB-x9BtMp3xxjd1pB]',
+            $params = array('to' => $this->push_id,
                             'title' => $title,
                             'body' => $body,
                             'channelId' => $this->channel);

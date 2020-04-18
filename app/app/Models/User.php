@@ -38,6 +38,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('App\Models\Camera', 'user_id', 'id');
     }
 
+    public function Alerts()
+    {
+        return $this->hasManyThrough('App\Models\Alert', 'App\Models\Camera', 'id', 'camera_id', 'id');
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

@@ -39,9 +39,9 @@ class AlertListener
 
         $cameraInfo = $camera->CameraInfo;
 
-        if(!$user || !$cameraInfo) return;
+        if(!$user || !$cameraInfo || ($user && !$user->push_id)) return;
 
-        $notification = new Notification();
+        $notification = new Notification($user->push_id);
 
         $title = "Alerta de movimento!";
 

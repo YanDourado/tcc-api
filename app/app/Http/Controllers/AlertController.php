@@ -41,8 +41,13 @@ class AlertController extends Controller
     {
         try
         {
+            $user = Auth::user();
             
+            $alerts = $user->Alerts;
 
+            $alerts->load('Camera');
+
+            return response()->json(['alerts' => $alerts], 200);
         }
         catch (\Exception $e)
         {
@@ -76,7 +81,7 @@ class AlertController extends Controller
 
             $file = $request->file('image');
 
-            $path = './upload/alerts/';
+            $path = 'upload/alerts/';
 
             $filePath = Alert::uploadImage($file, $path);
 

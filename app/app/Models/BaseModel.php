@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    public static function uploadImage(object $file, string $path, array $resize = array(300, 200))
+    public static function uploadImage(object $file, string $path, int $heighten = 300)
     {
         try
         {
@@ -23,7 +23,9 @@ class BaseModel extends Model
             $filePath = $path . $image;
 
             Image::make($file)
-                    ->resize($resize[0], $resize[1])
+                    ->heighten($heighten, function ($constraint) {
+                                        $constraint->upsize();
+                                    })
                     ->save($filePath);
 
             return $filePath;
