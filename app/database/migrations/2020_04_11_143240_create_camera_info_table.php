@@ -22,7 +22,7 @@ class CreateCameraInfoTable extends Migration
                         ->on('cameras')
                         ->onDelete('cascade');
 
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('description')->nullable();
 
             $table->string('thumbnail')->nullable();

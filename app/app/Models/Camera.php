@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Log;
 use Auth;
 use App\TCC;
+use App\Models\CameraInfo;
 use Illuminate\Database\Eloquent\Model;
 
 class Camera extends Model
@@ -34,6 +36,37 @@ class Camera extends Model
     public function CameraInfo()
     {
         return $this->hasOne('App\Models\CameraInfo', 'camera_id', 'id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            // ... code here
+        });
+
+        self::created(function($model){
+            
+            $cameraInfo = CameraInfo::create(array('camera_id' => $model->id ));
+
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            // ... code here
+        });
     }
 
     /**

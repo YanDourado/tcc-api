@@ -29,6 +29,13 @@ class ProfileController extends Controller
                                                         ->where('status', 1)
                                                         ->count();
 
+            $profile['alerts_count'] = $user->Alerts()
+                                              ->count();
+
+            $profile['viewed_alerts_count'] = $user->Alerts()
+                                                    ->whereNotNull('viewed_by')
+                                                    ->count();
+
             
             return response()->json(['profile' => $profile], 200);
         }

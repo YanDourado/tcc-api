@@ -45,7 +45,14 @@ class AlertController extends Controller
             
             $alerts = $user->Alerts;
 
-            $alerts->load('Camera');
+            $alerts->load('Camera.CameraInfo');
+
+            foreach ($alerts as $alert)
+            {
+                $createdAt = date('d/m/Y H:i:s', strtotime($alert->created_at));
+
+                $alert->createdAt = $createdAt;
+            }
 
             return response()->json(['alerts' => $alerts], 200);
         }
