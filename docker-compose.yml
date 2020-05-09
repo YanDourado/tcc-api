@@ -8,32 +8,35 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: codigoaberto
+      MYSQL_DATABASE: tcc
       MYSQL_USER: root
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
 
-  # nginx:
-  #   container_name: nginx
-  #   build: images/nginx
-  #   command: nginx -g "daemon off;"
-  #   links:
-  #     - php
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - db
+  nginx:
+    container_name: nginx
+    build: images/nginx
+    command: nginx -g "daemon off;"
+    volumes: 
+      - ./app:/var/www/html
+    links:
+      - php
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - php
 
-  # php:
-  #   container_name: php
-  #   build: images/php
-  #   volumes:
-  #     - ./app:/var/www/html
-  #   working_dir: /var/www/html/app
-  #   command: php-fpm
-  #   links:
-  #     - db:db
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - db
+  php:
+    container_name: php
+    build: images/php
+    volumes:
+      - ./app:/var/www/html
+    working_dir: /var/www/html
+    command: php-fpm
+    links:
+      - db:db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
