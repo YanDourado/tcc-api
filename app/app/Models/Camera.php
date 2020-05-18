@@ -96,6 +96,7 @@ class Camera extends Model
             {
                 $cameras = self::where('code', '=', $request['code'])
                                     ->where('secret', '=', $request['secret'])
+                                    ->whereNull('user_id')
                                     ->first();
             }
 
