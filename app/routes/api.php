@@ -43,6 +43,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'alert'], function () use ($router) {
 
             $router->get('', 'AlertController@index');
+
+            $router->put('', 'AlertController@update');
         });
 
     });

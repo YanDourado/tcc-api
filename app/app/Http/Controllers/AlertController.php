@@ -47,13 +47,6 @@ class AlertController extends Controller
 
             $alerts->load('Camera.CameraInfo');
 
-            foreach ($alerts as $alert)
-            {
-                $createdAt = date('d/m/Y H:i:s', strtotime($alert->created_at));
-
-                $alert->createdAt = $createdAt;
-            }
-
             return response()->json(['alerts' => $alerts], 200);
         }
         catch (\Exception $e)
@@ -124,13 +117,27 @@ class AlertController extends Controller
         {
             $user = Auth::user();
 
-            
+            $alert = Alert::find($request->input('alert_id'));
+
+            if(!$alert)
+            {
+                throw new Exception('Falha ao atualizar informações do alerta');
+            }
+
+            $alert->viewed_by = $user->id;
+            $alert->viewed_at = date('Y-m-d H:i:s', $request->input('viewed_at'));
+
+            $alert->save();
+
+            $alert->load('Camera.CameraInfo');
+
+            return response()->json(['alert' => $alert], 200);
         }
         catch (\Exception $e)
         {
             TCC::logError(__FILE__, __LINE__, __METHOD__, $e);
 
-            return response()->json(['message' => ''], 500);
+            return response()->json(['message' => 'Falha ao atualizar informações do alerta'], 500);
         }
     }
 }
