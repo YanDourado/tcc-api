@@ -72,15 +72,30 @@ class CameraController extends Controller
         {
             $user = Auth::user();
 
+            $file = $request->file('image');
+
             $validator = Validator::make($request->all(),
-                                            array('code' => 'required', 'secret' => 'required'));
+                                            array('code' => 'required', 'secret' => 'required', 'image' => 'mimes:jpeg,png'));
 
             if($validator->fails())
             {
                 return response()->json(['errors' => $validator->errors()], 409);
             }
 
-            $camera = Camera::create($request->all());
+            $camera = Camera::updateOrCreate($request->except('image'));
+
+            if($file)
+            {
+                $path = 'upload/thumbnails/';
+    
+                $filePath = Camera::uploadImage($file, $path, 'T-');
+
+                $cameraInfo = $camera->CameraInfo;
+
+                $cameraInfo->thumbnail = $filePath;
+
+                $cameraInfo->save();
+            }
 
             return response()->json(['camera' => $camera], 201);
         }

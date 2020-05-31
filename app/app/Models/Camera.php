@@ -6,9 +6,9 @@ use Log;
 use Auth;
 use App\TCC;
 use App\Models\CameraInfo;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Camera extends Model
+class Camera extends BaseModel
 {
     /**
      * The attributes that are mass assignable.

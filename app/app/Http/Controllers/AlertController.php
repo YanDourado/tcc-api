@@ -15,7 +15,8 @@ class AlertController extends Controller
     /**
      * @var $rules
      */
-    protected $rules = array('camera_id' => 'required|exists:cameras,id',
+    protected $rules = array('code' => 'required',
+                                'secret' => 'required',
                                 'image' => 'required|mimes:jpeg,png');
 
     /**
@@ -79,19 +80,24 @@ class AlertController extends Controller
                 return response()->json(['errors' => $validator->errors()], 409);
             }
 
+            $camera = Camera::where('code', '=', $request->input('code'))
+                                ->where('secret', '=', $request->input('secret'))
+                                ->first();
+                                
+            if(!$camera)
+                return response()->json(['CAMERA_NOT_FOUND'], 400);
+
             $file = $request->file('image');
 
             $path = 'upload/alerts/';
 
             $filePath = Alert::uploadImage($file, $path);
-
+            
             $alert = Alert::create([
-                'camera_id' => $request->input('camera_id'),
+                'camera_id' => $camera->id,
                 'image_url' => $filePath,
                 'has_humna' => $request->input('has_human')
             ]);
-
-            $camera = Camera::find($request->input('camera_id'));
 
             event(new AlertEvent($camera, $alert));
 

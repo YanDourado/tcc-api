@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    public static function uploadImage(object $file, string $path, int $heighten = 300)
+    public static function uploadImage(object $file, string $path, string $prefix = 'A-', int $heighten = 300)
     {
         try
         {
@@ -18,7 +18,7 @@ class BaseModel extends Model
             
             $fileExt = end($originalFilenameArr);
             
-            $image = 'A-' . time() . '.' . $fileExt;
+            $image = $prefix . time() . '.' . $fileExt;
 
             $filePath = $path . $image;
 
